@@ -10,7 +10,7 @@ The workflow of developing the REO-based BRCAness signature: <br>
 (3) a greedy algorithm was used to generate a set of gene pairs with high coverage in wild-type samples with iteration conditions. First, the gene pair with the highest coverage was chosen as the seed. Second, a candidate gene pair was
 taken into account that increases the most coverage and more than 1%.<br>
 Finally, using the rank-based algorithm, we discovered a BRCAness signature consisting of 2 gene pairs, including CXCL1 > SV2A and LY9 > CHRNB3, using gene expression profiles of ovarian cancer from the Cancer Genome Atlas.<br>
-![](https://github.com/ttchen0714/ BRCAness-signature/tree/master/Image/f3.jpg)<br>
+![](https://github.com/ttchen0714/BRCAness-signature/tree/master/Image/f3.jpg)<br>
 ## 3. Application
 ```
 RDtij=Rti-Rtj;
