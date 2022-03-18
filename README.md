@@ -1,7 +1,7 @@
 # BRCAness signature Manual
 ## 1. Within-sample relative expression orderings (REO)
 Within-sample REO was defined as a binary relation between gene i and gene j, where Gi > Gj or Gi < Gj. Gi and Gj denote the expression values of gene i and gene j, respectively. A set of REOs is highly stable in OvCa with BRCA1/2 mutation and reversed in patients with wild type BRCA1/2, which reflects the feature of BRCAness.<br> 
-![](https://github.com/ttchen0714/Image/f1.tif)<br>
+![](https://github.com/ttchen0714/BRCAness-signature.git/Image/f1.tif)<br>
 ## 2. BRCAness signature (2-GPS)
 The workflow of developing the REO-based BRCAness signature: <br>
 (1) we constructed a discrete profile based on the REOs of gene pairs;<br>
