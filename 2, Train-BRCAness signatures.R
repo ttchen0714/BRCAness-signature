@@ -4,34 +4,32 @@ reverse<-as.matrix(read.table("Result/reverse_pairs_99%fisher0.05_sym.txt",heade
 reverse[,1:2]<-as.numeric(reverse[,1:2])
 g1=reverse[,1];
 g2=reverse[,2];
-dim(reverse)
-RESULT=reverse
 #####################   Input
-class<-as.matrix(read.table('Data/brca-mutation-TCGA_platin.txt',header=TRUE,row.names=1,sep="\t",quote=""));
-colnames(class)<-gsub("\\.","-",colnames(class));
-BRCAmut<-colnames(class)[which(class[3,]==1)];
-BRCAwild<-colnames(class)[which(class[3,]==0)];
-exp=as.matrix(read.table("data/expProfie_TCGA.txt",header=TRUE,row.names=1,sep="\t",quote=""))
-colnames(exp)<-gsub("\\.","-",colnames(exp));
-myrank<-as.matrix(unlist(apply(exp,2,rank))) 
-gene1_list<-RESULT[,1];
-gene2_list<-RESULT[,2];
+TCGA_class<-as.matrix(read.table('Data/brca-mutation-TCGA_platin.txt',header=TRUE,row.names=1,sep="\t",quote=""));
+colnames(TCGA_class)<-gsub("\\.","-",colnames(TCGA_class));
+BRCAmut<-colnames(TCGA_class)[which(TCGA_class[3,]==1)];
+BRCAwild<-colnames(TCGA_class)[which(TCGA_class[3,]==0)];
+TCGA_trainset=as.matrix(read.table("Data/expProfie_TCGA.txt",header=TRUE,row.names=1,sep="\t",quote=""))
+colnames(TCGA_trainset)<-gsub("\\.","-",colnames(TCGA_trainset));
+myrank<-as.matrix(unlist(apply(TCGA_trainset,2,rank))) 
+gene1_list<-reverse[,1];
+gene2_list<-reverse[,2];
 #####################   REO
-result=matrix(0,ncol=dim(myrank)[2],nrow=dim(RESULT)[1]);
+result=matrix(0,ncol=dim(myrank)[2],nrow=dim(reverse)[1]);
 diff=myrank[gene1_list,]-myrank[gene2_list,];
 result[which(diff>0)]=1
-pair<-paste(RESULT[,1],RESULT[,2],sep=">");
+pair<-paste(reverse[,1],reverse[,2],sep=">");
 rownames(result)=pair;
-class_all=cbind(pair,RESULT[,1:2],result);
+class_all=cbind(pair,reverse[,1:2],result);
 ####################
-BRCAmut<-colnames(class)[which(class[3,]==1)];
-BRCAwild<-colnames(class)[which(class[3,]==0)];#
+BRCAmut<-colnames(TCGA_class)[which(TCGA_class[3,]==1)];
+BRCAwild<-colnames(TCGA_class)[which(TCGA_class[3,]==0)];#
 vary<-result;
 colnames(vary)<-colnames(myrank);
 #####################   Coverage max
 sample_com=intersect(colnames(vary),BRCAwild);
 vary=vary[,sample_com];
-label=class[3,sample_com]
+label=TCGA_class[3,sample_com]
 #####################   Greedy Algorithm
 mode(vary)="numeric";
 coverage_all=unlist(apply(vary,1,function(x) table(x)[1]/length(x)));
@@ -58,9 +56,9 @@ for(i in 1:dim(toAdd_class)[1]){
 	}else break
 }
 #####################   Output
-pair<-paste(RESULT[,1],RESULT[,2],sep=">");
-RESULT_gene=RESULT[match(current_pair,pair),];
-write.table(RESULT_gene,'Result/BRCAness_signature.txt',sep='\t',row.names=F,quote=FALSE);
+pair<-paste(reverse[,1],reverse[,2],sep=">");
+reverse_gene=reverse[match(current_pair,pair),];
+write.table(reverse_gene,'Result/BRCAness_signature.txt',sep='\t',row.names=F,quote=FALSE);
 
 
 

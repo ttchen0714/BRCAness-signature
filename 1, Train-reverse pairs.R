@@ -1,25 +1,24 @@
 setwd("ttchen0714/BRCAness-signature/2-gene pairs"); 
 dyn.load("FisherExactTest64.dll")
 #####################    Input
-GEO_trainset = as.matrix(read.table("Data/expProfie_TCGA.txt",header=TRUE,row.names=1,sep="\t",quote=""))
-colnames(GEO_trainset)<-gsub("\\.","-",colnames(GEO_trainset));
-rowname=rownames(GEO_trainset)
-dim(GEO_trainset)
-GEO_trainset=apply(GEO_trainset,2,as.numeric)
-rownames(GEO_trainset)=rowname
+TCGA_trainset = as.matrix(read.table("Data/expProfie_TCGA.txt",header=TRUE,row.names=1,sep="\t",quote=""))
+colnames(TCGA_trainset)<-gsub("\\.","-",colnames(TCGA_trainset));
+rowname=rownames(TCGA_trainset)
+TCGA_trainset=apply(TCGA_trainset,2,as.numeric)
+rownames(TCGA_trainset)=rowname
 # duplicated samples after remove other information? 
-if(length(unique(substr(colnames(GEO_trainset),1,12)))==length(substr(colnames(GEO_trainset),1,12)))
+if(length(unique(substr(colnames(TCGA_trainset),1,12)))==length(substr(colnames(TCGA_trainset),1,12)))
 {
     print("No duplicated samples after remove other information in sample names!\n")
 }else{
     print("Duplicated samples after remove other information in sample names!\n")
 }
 #####################    Input
-GSE4_class = as.matrix(read.table("Data/brca-mutation-TCGA_platin.txt",header=TRUE,row.names=1,sep="\t",quote=""))
-colnames(GSE4_class)<-as.matrix(unlist(apply(as.matrix(colnames(GSE4_class)),1,function(x) substr(x,1,12))))
-colnames(GSE4_class)<-gsub("\\.","-",colnames(GSE4_class))
-tcga_BRCAmut = GEO_trainset[,intersect(colnames(GEO_trainset),names(which(GSE4_class[3,]=="1")))]
-tcga_BRCAwild = GEO_trainset[,intersect(colnames(GEO_trainset),names(which(GSE4_class[3,]=="0")))]
+TCGA_class = as.matrix(read.table("Data/brca-mutation-TCGA_platin.txt",header=TRUE,row.names=1,sep="\t",quote=""))
+colnames(TCGA_class)<-as.matrix(unlist(apply(as.matrix(colnames(TCGA_class)),1,function(x) substr(x,1,12))))
+colnames(TCGA_class)<-gsub("\\.","-",colnames(TCGA_class))
+tcga_BRCAmut = TCGA_trainset[,intersect(colnames(TCGA_trainset),names(which(TCGA_class[3,]=="1")))]
+tcga_BRCAwild = TCGA_trainset[,intersect(colnames(TCGA_trainset),names(which(TCGA_class[3,]=="0")))]
 #####################   Stable gene pairs in mutated samples
 cutoff =0.99
 stable_matrix_mut = matrix(0,nrow=nrow(tcga_BRCAmut),ncol=nrow(tcga_BRCAmut),dimnames=list(rownames(tcga_BRCAmut),rownames(tcga_BRCAmut)))
@@ -51,7 +50,7 @@ for(i in 1:nrow(stable_matrix_mut))
     tmp_b = unlist(apply(matrix(rep(tcga_BRCAwild[i,],length(which(stable_matrix_mut[i,]>0))),nrow=length(which(stable_matrix_mut[i,]>0)),byrow=TRUE)-tcga_BRCAwild[which(stable_matrix_mut[i,]>0),],1,function(x){length(which(x>0))}))
     tmp_d = ncol(tcga_BRCAwild)-tmp_b
     tmp = c(rbind(tmp_a,tmp_c,tmp_b,tmp_d))
-    tmp_pvalue = .C("FisherExactTest",as.integer(tmp),as.integer(length(tmp)),as.numeric(c(0,lfactorial(1:ncol(GEO_trainset)))),p.value=as.numeric(rep(0,length(tmp)/4)))$p.value
+    tmp_pvalue = .C("FisherExactTest",as.integer(tmp),as.integer(length(tmp)),as.numeric(c(0,lfactorial(1:ncol(TCGA_trainset)))),p.value=as.numeric(rep(0,length(tmp)/4)))$p.value
     fisher_pvalue[index:(index+length(tmp_a)-1),] = cbind(rep(rownames(stable_matrix_mut)[i],length(tmp_a)),rownames(stable_matrix_mut)[stable_matrix_mut[i,]>0],tmp_a,tmp_b,tmp_pvalue)
     index = index+length(tmp_a)
     setTxtProgressBar(pb,i)
