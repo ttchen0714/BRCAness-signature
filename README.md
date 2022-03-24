@@ -4,7 +4,7 @@ Within-sample REO was defined as a binary relation between gene i and gene j, wh
 <br>
 ![](https://github.com/ttchen0714/BRCAness-signature/raw/master/Image/f1.jpg)<br>
 <br>
-## 2. BRCAness signature (2-GPS)
+## 2. Training the BRCAness signature (2-GPS)
 The workflow of developing the REO-based BRCAness signature: <br>
 (1) we constructed a discrete profile based on the REOs of gene pairs;<br>
 (2) we defined the reversed gene pair with a stable REO pattern (Gi > Gj) in more than 99% of mutation samples, but with a significantly reversed REO pattern (Gi < Gj) in wild-type samples tested by Fisher’s test with p < 0.05; <br>
