@@ -1,5 +1,5 @@
-setwd("ttchen0714/BRCAness-signature/2-gene pairs"); 
-dyn.load("FisherExactTest64.dll")
+dyn.load("FisherExactTest64.dll") #for windows 64-Bit
+#dyn.load("FisherExactTest.so")  for linux 32-Bit
 #####################    Input
 TCGA_trainset = as.matrix(read.table("Data/expProfie_TCGA.txt",header=TRUE,row.names=1,sep="\t",quote=""))
 colnames(TCGA_trainset)<-gsub("\\.","-",colnames(TCGA_trainset));
@@ -63,7 +63,7 @@ fisher_filter_result=fisher_pvalue[which(as.numeric(fisher_pvalue[,5])<result_fi
 fisher_filter_result=fisher_filter_result[order(as.numeric(fisher_filter_result[,5])),];
 colnames(fisher_filter_result) = c("Gene1_ID","Gene2_ID","G1>G2_mut","G1>G2_wild","fisher_pvalue")
 #####################    Id to symbol
-gene_info = as.matrix(read.table("Data/Homo_sapiens.gene_info.txt",comment.char="",header=F,skip=1,sep="\t",quote=""))[,c(2,3,5)];
+gene_info = as.matrix(read.table("Data/Homo_sapiens.gene_info.txt",comment.char="",header=FALSE,skip=1,sep="\t",quote=""))[,c(2,3,5)];
 gene_info[,1] = as.character(as.numeric(gene_info[,1]))
 id1<-fisher_filter_result[,1];
 id2<-fisher_filter_result[,2];
@@ -72,4 +72,4 @@ sym2<-gene_info[match(id2,gene_info[,1]),2];
 #####################    Output
 fisher_filter_result<-cbind(fisher_filter_result[,1:2],sym1,sym2,fisher_filter_result[,-c(1,2)]);
 colnames(fisher_filter_result) = c("Gene1_ID","Gene2_ID","Gene1_Symbol","Gene2_Symbol","G1>G2_mut","G1>G2_wild","fisher_pvalue")
-write.table(fisher_filter_result,"Result/reverse_pairs_99%fisher0.05_sym.txt",col.names=TRUE,row.names=F,sep="\t",quote=F)
+write.table(fisher_filter_result,"Result/reverse_pairs_99%fisher0.05_sym.txt",col.names=TRUE,row.names=FALSE,sep="\t",quote=F)

@@ -1,4 +1,3 @@
-setwd("ttchen0714/BRCAness-signature/2-gene pairs"); 
 #####################   Input
 reverse<-as.matrix(read.table("Result/reverse_pairs_99%fisher0.05_sym.txt",header=TRUE,sep="\t",quote="")) 
 reverse[,1:2]<-as.numeric(reverse[,1:2])
@@ -58,7 +57,7 @@ for(i in 1:dim(toAdd_class)[1]){
 #####################   Output
 pair<-paste(reverse[,1],reverse[,2],sep=">");
 reverse_gene=reverse[match(current_pair,pair),];
-write.table(reverse_gene,'Result/BRCAness_signature.txt',sep='\t',row.names=F,quote=FALSE);
+write.table(reverse_gene,'Result/BRCAness_signature.txt',sep='\t',row.names=FALSE,quote=FALSE);
 
 
 
